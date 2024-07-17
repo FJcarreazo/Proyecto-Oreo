@@ -20,10 +20,10 @@ productRouter.get('/', async (req, res) => {
     }
 });
 
-productRouter.delete('/delete', async (request, response) => {
-    const deleteProduct = await Product.deleteOne({ _id: request.body.id });
+productRouter.delete('/delete/:id', async (request, response) => {
+    const deleteProduct = await Product.deleteOne({ _id: request.params.id });
     if (!deleteProduct) {
-      return response.status(500).json({ error: 'No se pudo eliminar el producto' });
+        return response.status(500).json({ error: 'No se pudo eliminar el producto' });
     }
     return response.status(200).json('Producto eliminado');
 });
@@ -35,9 +35,9 @@ productRouter.patch('/update', async (request, response) => {
         description: request.body.description,
         price: request.body.price
     }
-    const updateProduct = await Product.findByIdAndUpdate(request.body.id, updateParams, { new: true});
-    if (updateProduct) {
-        return response.status(500).json({ error: 'No se ha podido actualizar el producto'});
+    const updateProduct = await Product.findByIdAndUpdate(request.body.id, updateParams, { new: true });
+    if (!updateProduct) {
+        return response.status(500).json({ error: 'No se ha podido actualizar el producto' });
     }
     return response.status(201).json(updateProduct);
 });
