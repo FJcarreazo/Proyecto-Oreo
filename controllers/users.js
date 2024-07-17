@@ -17,7 +17,6 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { name, email, selector, telefono, password } = request.body
 
-
   if (!name || !email || !telefono || !selector || !password) {
     return response.status(400).json({ error: 'Todos los espacio son requeridos' });
   }
@@ -28,11 +27,8 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: 'El email ya se encuentra en uso' });
   }
 
-
   const saltRounds = 10;
-
   const passwordHash = await bcrypt.hash(password, saltRounds);
-
   const newUser = new User({
     name,
     email,
@@ -109,26 +105,65 @@ usersRouter.patch('/:id/:token', async (request, response) => {
 });
 
 usersRouter.delete('/delete', async (request, response) => {
-  const deleteUser = await User.deleteOne({_id: request.params.id});
+  const deleteUser = await User.deleteOne({ _id: request.body.id });
   if (!deleteUser) {
-    return response.status(500).json({ error: 'No se puedo eliminar el usuario'});
+    return response.status(500).json({ error: 'No se puedo eliminar el usuario' });
   }
   return response.status(200).json('Usuario eliminado')
 });
 
 usersRouter.patch('/update', async (request, response) => {
+  const saltRounds = 10;
+  let passwordHash = null;
+  if (request.body.password) {
+    passwordHash = await bcrypt.hash(request.body.password, saltRounds);
+  }
+
   const updateParams = {
     name: request.body.name,
-    email: request.body.email, 
-    telefono: request.body.telefono, 
-    passwordHash: request.body.passwordHash, 
+    email: request.body.email,
+    telefono: `${request.body.selector}${request.body.telefono}`,
+    passwordHash
   }
-  const updateUsers = await Usersers.findByIdAndUpdate(request.params.id, updateParams, {new: true});
+  if (!passwordHash) {
+    delete (updateParams.passwordHash);
+  }
+  const updateUsers = await User.findByIdAndUpdate(request.body.id, updateParams, { new: true });
   if (!updateUsers) {
-    return response.status(500).json({ error: 'No se ha podido actualizar el usuario'})
+    return response.status(500).json({ error: 'No se ha podido actualizar el usuario' })
   }
   return response.status(200).json(updateUsers);
 
+});
+
+usersRouter.post('/create', async (request, response) => {
+  const { name, email, selector, telefono, password } = request.body;
+
+  if (!name || !email || !telefono || !selector || !password) {
+    return response.status(400).json({ error: 'Todos los campos son requeridos' });
+  }
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+  const userData = {
+    name: name,
+    email: email,
+    telefono: `${selector}${telefono}`,
+    passwordHash: passwordHash,
+    verified: true
+  }
+
+  const userExist = await User.findOne({ email });
+  if (userExist) {
+    return response.status(400).json({ error: 'El email ya se encuentra en uso' });
+  }
+
+  const newUser = new User(userData);
+  const savedUser = await newUser.save();
+  if (!savedUser) {
+    return response.status(500).json({ error: 'No se ha podido crear el usuario' })
+  }
+  return response.status(200).json(savedUser);
 });
 
 module.exports = usersRouter;
