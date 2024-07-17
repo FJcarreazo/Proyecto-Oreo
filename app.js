@@ -12,12 +12,13 @@ const loginRouter = require('./controllers/login');
 const logoutRouter = require('./controllers/logout');
 const productRouter = require('./controllers/product');
 const cartRouter = require('./controllers/carrito');
-const { MONGO_URI } = require('./config');
+const { MONGO_URI, MONGO_DEBUG } = require('./config');
 const imageRouter = require('./controllers/image');
 
 (async () => {
 
     try {
+        mongoose.set('debug', MONGO_DEBUG);
         await mongoose.connect(MONGO_URI);
         console.log('Conectado a Mongo DB');
     } catch (error) {
