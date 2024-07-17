@@ -14,15 +14,6 @@ usersRouter.get('/', async (request, response) => {
   }
 });
 
-usersRouter.post('/create', async (request, response) => {
-});
-
-usersRouter.patch('/update', async (request, response) => {
-});
-
-usersRouter.delete('/delete', async (request, response) => {
-});
-
 usersRouter.post('/', async (request, response) => {
   const { name, email, selector, telefono, password } = request.body
 
@@ -113,8 +104,8 @@ usersRouter.patch('/:id/:token', async (request, response) => {
   }
 });
 
-usersRouter.delete('/delete', async (request, response) => {
-  const deleteUser = await User.deleteOne({ _id: request.body.id });
+usersRouter.delete('/delete/:id', async (request, response) => {
+  const deleteUser = await User.deleteOne({ _id: request.params.id });
   if (!deleteUser) {
     return response.status(500).json({ error: 'No se puedo eliminar el usuario' });
   }

@@ -35,7 +35,7 @@ $(document).ready(function () {
         data-telefono="${item.telefono}"
         data-email="${item.email}"
       >
-        <td><a href="#" class="text-body">${item.name}</a></td>
+        <td>${item.name}</td>
         <td>${item.telefono}</td>
         <td>${item.email}</td>
         <td>
@@ -84,15 +84,22 @@ $(document).ready(function () {
     e.preventDefault();
     const item = $(this).parent().parent().parent().parent();
     const id = item.attr('id');
-    bootbox.confirm("&iquest;Seguro que desea eliminar este item?", function (result) {
+    bootbox.confirm("&iquest;Seguro que desea eliminar este item?", async function (result) {
       if (result) {
-
+        $('#loading').fadeIn();
+        try {
+          await axios.delete('/api/users/delete/' + id);
+          getUserList();
+        } catch (e) {
+          console.error(e);
+          $('#loading').fadeOut();
+        }
       }
     })
   })
 
   //CLICK SAVE BUTTON
-  $('#saveForm').on('click', function () {
+  $('#saveForm').on('click', async function () {
     const phonePrefix = $('#phonePrefix');
     const phoneNumber = $('#phoneNumber');
     const idItem = $('#idItem');
@@ -134,10 +141,20 @@ $(document).ready(function () {
       if (!idItem.val()) delete newUser.id;
       if (!password.val()) delete newUser.password;
 
-      console.log('DATA TO SAVE', newUser)
-
+      try {
+        if (mode === 'edit') {
+          await axios.patch('/api/users/update', newUser);
+        } else {
+          await axios.post('/api/users/create', newUser);
+        }
+        $('#createUser').modal('hide');
+        clearForm();
+        getUserList();
+      } catch (e) {
+        console.error(e);
+        $('#loading').fadeOut();
+      }
     }
-
   })
 
   $('#createUser').on('hidden.bs.modal', function () {
@@ -146,5 +163,4 @@ $(document).ready(function () {
   })
 
   getUserList();
-
 })
