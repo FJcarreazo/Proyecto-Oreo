@@ -7,7 +7,7 @@ $(document).ready(function () {
     $('#tableBody').html('');
     data.map(item => {
       $('#tableBody').append(`
-      <tr>
+      <tr id="${item.id}">
         <td><a href="#" class="text-body">${item.name}</a></td>
         <td>${item.telefono}</td>
         <td>${item.email}</td>
@@ -33,6 +33,8 @@ $(document).ready(function () {
 
     $('#loading').fadeOut();
   }
+
+
 
   getUserList();
 
