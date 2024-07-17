@@ -20,4 +20,12 @@ productRouter.get('/', async (req, res) => {
     }
 });
 
+productRouter.delete('/delete', async (request, response) => {
+    const deleteProduct = await Product.deleteOne({ _id: request.body.id });
+    if (!deleteProduct) {
+      return response.status(500).json({ error: 'No se pudo eliminar el producto' });
+    }
+    return response.status(200).json('Producto eliminado');
+});
+
 module.exports = productRouter; 
