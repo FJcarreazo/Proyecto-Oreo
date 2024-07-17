@@ -56,10 +56,4 @@ app.use('/api/cart', cartRouter);
 app.use('/api/logout', logoutRouter);
 app.use('/endpoint/products', productRouter);
 
-
-
-
-
-
-
 module.exports = app;

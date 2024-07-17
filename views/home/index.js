@@ -1,102 +1,106 @@
 import { createNotification } from '../components/notification.js';
+$(document).ready(function () {
+    const form = $('#form');
+    const nameInput = $('#name-input');
+    const telefonoInput = $('#telefono-input');
+    const emailInput = $('#email-input');
+    const passwordInput = $('#password-input');
+    const select = $('#selector');
+    const formBtn = $('#form-btn');
+    const notification = $('#notification');
+    const nameValidation = $('#nameValidation');
+    const emailValidation = $('#emailValidation');
+    const passValidation = $('#passValidation');
 
-const form = document.querySelector('#form');
-const nameInput = document.querySelector('#name-input');
-const telefonoInput = document.querySelector('#telefono-input');
-const emailInput = document.querySelector('#email-input');
-const passwordInput = document.querySelector('#password-input');
-const select = document.querySelector('#selector');
-const formBtn = document.querySelector('#form-btn');
-const notification = document.querySelector('#notification');
+    const EMAIL_VALIDATION = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    const PASSWORD_VALIDATION = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/
+    const NAME_VALIDATION = /^[A-Z][a-z ]*[A-Z][a-z]*$/
+    const TLF_VALIDATION = /^[0-9].{6}$/
 
-// Regex validacion 
+    nameValidation.fadeOut();
+    emailValidation.fadeOut();
+    passValidation.fadeOut();
 
-const EMAIL_VALIDATION = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-const PASSWORD_VALIDATION = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/
-const NAME_VALIDATION = /^[A-Z][a-z ]*[A-Z][a-z]*$/
-const TLF_VALIDATION = /^[0-9].{6}$/
-
-// Validaciones
-let emailValidation = false;
-let passwordValidation = false;
-let nameValidation = false;
-let tlfValidation = false;
-
-// funcion
-const validacion = (input, regexValidation) => {
-
-    formBtn.disabled = nameValidation && emailValidation && passwordValidation && tlfValidation ? false : true;
-
-    if (input.value === '') {
-        input.classList.remove('outline-green-500', 'outline-2');
-        input.classList.remove('outline-red-500', 'outline-2');
-        input.classList.add('outline');
-    } else if (regexValidation) {
-        input.classList.add('outline-green-500', 'outline-2');
-    } else {
-        input.classList.remove('outline-green-500', 'outline-2');
-        input.classList.add('outline-red-500', 'outline-2');
-    }
-};
-          
-
-// eventos
-nameInput.addEventListener('input', e => {
-     nameValidation = NAME_VALIDATION.test(e.target.value);
-    validacion(nameInput, nameValidation)
-});
-
-emailInput.addEventListener('input', e => {
-    emailValidation = EMAIL_VALIDATION.test(e.target.value);
-   validacion(emailInput, emailValidation)
-});
-
-passwordInput.addEventListener('input', e => {
-    passwordValidation = PASSWORD_VALIDATION.test(e.target.value);
-   validacion(passwordInput, passwordValidation)
-});
-
-telefonoInput.addEventListener('input', e => {
-    tlfValidation = TLF_VALIDATION.test(e.target.value);
-   validacion(telefonoInput, tlfValidation)
-});
-
-
-form.addEventListener('submit', async e => {
-    e.preventDefault();
-    try {
-        const newUser = {
-            name: nameInput.value,
-            email: emailInput.value,
-            selector: select.value,
-            telefono: telefonoInput.value,
-            password: passwordInput.value,
-            
+    const validateField = (field, fieldValidation, valid) => {
+        if (valid) {
+            field.removeClass('outline-red-500');
+            field.addClass('outline-green-500');
+            formBtn.attr('disabled', false);
+            if (fieldValidation) fieldValidation.fadeOut();
+        } else {
+            field.removeClass('outline-green-500');
+            field.addClass('outline-red-500');
+            formBtn.attr('disabled', true);
+            if (fieldValidation) fieldValidation.fadeIn();
         }
-        console.log(newUser);
-        const { data } = await axios.post('/api/users', newUser);
-        createNotification(false, data);
-        setTimeout(() => {
-            notification.innerHTML = '';
-        }, 5000);
-
-        nameInput.value = '';
-        emailInput.value = '';
-        telefonoInput.value = '';
-        passwordInput.value = '';
-        validacion(nameInput, false);
-        validacion(emailInput, false);
-        validacion(select, false);
-        validacion(telefonoInput, false);
-        validacion(passwordInput, false);
-        
-        
-
-    } catch (error) {
-        createNotification(true, error.response.data.error);
-        setTimeout(() => {
-            notification.innerHTML = '';
-        }, 5000)
-        
     }
-});
+
+    nameInput.on('blur', function () {
+        validateField($(this), nameValidation, NAME_VALIDATION.test($(this).val()))
+    })
+    emailInput.on('blur', function () {
+        validateField($(this), emailValidation, EMAIL_VALIDATION.test($(this).val()))
+    })
+    passwordInput.on('blur', function () {
+        validateField($(this), passValidation, PASSWORD_VALIDATION.test($(this).val()))
+    })
+    telefonoInput.on('blur', function () {
+        validateField($(this), null, TLF_VALIDATION.test($(this).val()))
+    })
+
+    const clearForm = () => {
+        nameInput.val(''); nameInput.removeClass('outline-green-500');
+        emailInput.val(''); emailInput.removeClass('outline-green-500');
+        telefonoInput.val(''); telefonoInput.removeClass('outline-green-500');
+        passwordInput.val(''); passwordInput.removeClass('outline-green-500');
+        nameValidation.fadeOut();
+        emailValidation.fadeOut();
+        passValidation.fadeOut();
+    }
+
+    formBtn.on('click', async function (e) {
+        e.preventDefault();
+        try {
+            if (
+                NAME_VALIDATION.test(nameInput.val()) &&
+                EMAIL_VALIDATION.test(emailInput.val()) &&
+                PASSWORD_VALIDATION.test(passwordInput.val()) &&
+                TLF_VALIDATION.test(telefonoInput.val())
+            ) {
+                $('#loading').fadeIn();
+                const newUser = {
+                    name: nameInput.val(),
+                    email: emailInput.val(),
+                    selector: select.val(),
+                    telefono: telefonoInput.val(),
+                    password: passwordInput.val(),
+                }
+                const { data } = await axios.post('/api/users', newUser);
+                createNotification(false, data);
+                setTimeout(() => {
+                    notification.innerHTML = '';
+                    clearForm();
+                    $('#loading').fadeOut();
+                }, 1000);
+
+            } {
+                $('#loading').fadeOut();
+                validateField(nameInput, nameValidation, NAME_VALIDATION.test(nameInput.val()))
+                validateField(emailInput, emailValidation, EMAIL_VALIDATION.test(emailInput.val()))
+                validateField(passwordInput, passValidation, PASSWORD_VALIDATION.test(passwordInput.val()))
+                validateField(telefonoInput, null, TLF_VALIDATION.test(telefonoInput.val()))
+            }
+
+        } catch (error) {
+            $('#loading').fadeOut();
+            if (error.response) {
+                createNotification(true, error.response.data.error);
+            }
+            setTimeout(() => {
+                notification.innerHTML = '';
+            }, 5000)
+
+        }
+    })
+
+})

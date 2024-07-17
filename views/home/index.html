@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/output.css">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <title>Registro</title>
 </head>
 
 <body>
     <section class="min-h-screen flex items-stretch text-white ">
+        <div class="loading" id="loading" style="display: none;">Loading&#8230;</div>
         <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center"
             style="background-image: url(oreo\ difinitivo_page-0011.jpg);">
             <div id="notification" class="fixed top-16 rounded-lg p-4 m-2">
@@ -63,43 +66,44 @@
                     or use email your account
                 </p> -->
                 <form id="form" action="" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
-                    <div class="pb-2 pt-0.5">
+                    <div class="mb-4 pt-0.5">
                         <input type="text" name="Nombre" id="name-input" placeholder="Nombre y apellido"
                             class="block w-full p-4 text-lg rounded-xl bg-transparent outline">
-                        <p class="text-sm">Tanto el nombre como el apellido <br>
+                        <p class="text-sm" id="nameValidation">Tanto el nombre como el apellido <br>
                             tienen que empezar con mayusculas.</p>
                     </div>
-                    <div class="pb-2 pt-0.5 flex p-1 bg-transparent">
-                        <select id="selector" class="rounded-sm m-2.5 pb-2 pt-1 bg-[#1a1f12] outline text-xl">
+                    <div class="mb-4 flex bg-transparent">
+                        <select id="selector" class="text-lg rounded-xl p-4 bg-[#1a1f12] outline ">
                             <option>0412</option>
                             <option>0414</option>
                             <option>0424</option>
                             <option>0426</option>
                         </select>
-                        <input class="block w-full p-4 text-lg rounded-xl bg-transparent outline" type="text"
-                            name="Telefono" id="telefono-input" placeholder="Numero Telefonico Venezolano">
+                        <input class="inline-block w-full p-4 text-lg rounded-xl bg-transparent outline"
+                            style="margin-left: 15px;" type="text" name="Telefono" id="telefono-input"
+                            placeholder="Numero Telefonico Venezolano">
                     </div>
-                    <div class="pb-2 pt-0.5">
+                    <div class="mb-4 pt-0.5">
                         <input class="block w-full p-4 text-lg rounded-xl bg-transparent outline" type="text"
                             name="Email" id="email-input" placeholder="Ejemplo@gmail.com">
-                        <p class="text-sm">El correo es requerido</p>
+                        <p class="text-sm" id="emailValidation">El correo es invalido</p>
                     </div>
-                    <div class="pb-2 pt-0.5">
+                    <div class="mb-4 pt-0.5">
                         <input class="block w-full p-4 text-lg rounded-xl bg-transparent outline" type="password"
                             name="password" id="password-input" placeholder="Contraseña">
-                        <p class="text-sm">Debe contener al menos 1 letra <br>
+                        <p class="text-sm" id="passValidation">Debe contener al menos 1 letra <br>
                             Debe contener al menos 1 numero <br>
                             Debe contener al menos 8 caracteres.
                         </p>
                     </div>
-                    <div class="text-right text-gray-400 hover:underline hover:text-gray-100 flex justify-evenly">
-                        <a href="/login/">Iniciar Sesion</a>
-                        <a href="#">¿Has olvidado tu contraseña?</a>
+                    <div class="text-right text-gray-400  flex justify-evenly">
+                        <a href="/login/" class="hover:underline hover:text-gray-100">Iniciar Sesion</a>
+                        <a href="#" class="hover:underline hover:text-gray-100">¿Has olvidado tu contraseña?</a>
                     </div>
                     <div class="px-4 pb-2 pt-4">
-                        <button id="form-btn" disabled
-                            class="uppercase block w-full p-4 text-lg rounded-full bg-[#7c8857] hover:bg-[#95a369] focus:outline-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                            id="login-btn">sign in</button>
+                        <button type="submit" id="form-btn" disabled
+                            class="uppercase block w-full p-4 text-lg rounded-full bg-[#7c8857] hover:bg-[#95a369] focus:outline-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">sign
+                            in</button>
                     </div>
 
                     <div class="py-2 text-center right-0 left-0 flex justify-center space-x-4 mt-16 lg:hidden ">
