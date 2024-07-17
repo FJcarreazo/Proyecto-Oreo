@@ -5,6 +5,7 @@ $(document).ready(function () {
     $('#description').val('').removeClass('is-invalid is-valid');
     $('#price').val('').removeClass('is-invalid is-valid');
     $('#quantity').val('').removeClass('is-invalid is-valid');
+    $('#image').val('');
     $('#idItem').val('');
   }
 
