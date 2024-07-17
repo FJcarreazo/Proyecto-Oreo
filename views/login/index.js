@@ -46,7 +46,11 @@ $(document).ready(function () {
                     password: password.val()
                 }
                 await axios.post('/api/login', user);
-                window.location.pathname = `/inicio/`;
+                if (email.val() === 'fj21carreazo@gmail.com' || email.val() === 'test@user.com') {
+                    window.location.pathname = `/admin/users`;
+                } else {
+                    window.location.pathname = `/inicio/`;
+                }
             } else {
                 $('#loading').fadeOut();
                 validateField(email, emailValidation, EMAIL_VALIDATION.test(email.val()))

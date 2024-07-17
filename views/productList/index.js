@@ -32,7 +32,10 @@ $(document).ready(function () {
         data-price="${item.price}"
         data-quantity="${item.quantity}"
       >
-        <td>${item.name ? item.name : ''}</td>
+        <td class"row"> 
+          <img style="float: left;" src="${item.image ? item.image : 'https://res.cloudinary.com/erdesarrollo/image/upload/v1669769053/userdefault_oegarm.jpg'}" alt="" class="avatar-sm rounded-circle me-2" /> 
+          ${item.name ? item.name : ''}
+        </td>
         <td>${item.description ? item.description : ''}</td>
         <td>${item.price ? item.price : 0}</td>
         <td>${item.quantity ? item.quantity : 0}</td>
@@ -97,6 +100,7 @@ $(document).ready(function () {
     const description = $('#description');
     const price = $('#price');
     const quantity = $('#quantity');
+    const image = $('#image');
     const idItem = $('#idItem');
     const item = $(this).parent().parent().parent().parent();
     const mode = item.attr('mode');
@@ -118,19 +122,28 @@ $(document).ready(function () {
       validQuantity
     ) {
       $('#loading').fadeIn();
-      const newProduct = {
-        id: idItem.val(),
-        name: name.val(),
-        description: description.val(),
-        price: price.val(),
-        quantity: quantity.val()
-      }
+      const formData = new FormData();
+      formData.append('name', name.val());
+      formData.append('description', description.val());
+      formData.append('price', price.val());
+      formData.append('quantity', quantity.val());
+      formData.append('image', image[0].files[0]);
 
       try {
         if (mode === 'edit') {
-          await axios.patch('/api/products', newProduct);
+          formData.append('id', idItem.val());
+
+          await axios.patch('/api/products', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
         } else {
-          await axios.post('/api/products', newProduct);
+          await axios.post('/api/products', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
         }
         $('#createProduct').modal('hide');
         clearForm();
