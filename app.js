@@ -43,6 +43,7 @@ app.use('/create', express.static(path.resolve('views', 'create')));
 app.use('/agendarProducto', express.static(path.resolve('views', 'agendarProducto')));
 
 app.use('/admin/users', express.static(path.resolve('views', 'userlist')));
+app.use('/admin/products', express.static(path.resolve('views', 'productList')));
 
 
 

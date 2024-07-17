@@ -2,15 +2,16 @@ $(document).ready(function () {
 
   const getUserList = async () => {
     $('#loading').fadeIn();
-    const { data } = await axios.get('/api/users');
+    const { data } = await axios.get('/api/products');
 
     $('#tableBody').html('');
     data.map(item => {
       $('#tableBody').append(`
       <tr>
-        <td><a href="#" class="text-body">${item.name}</a></td>
-        <td>${item.telefono}</td>
-        <td>${item.email}</td>
+        <td><a href="#" class="text-body">${item.name ? item.name : ''}</a></td>
+        <td>${item.description ? item.description : ''}</td>
+        <td>${item.price ? item.price : 0}</td>
+        <td>${item.quantity ? item.quantity : 0}</td>
         <td>
             <ul class="list-inline mb-0">
                 <li class="list-inline-item">
