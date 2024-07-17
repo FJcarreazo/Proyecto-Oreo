@@ -81,7 +81,7 @@ $(document).ready(function () {
       if (result) {
         $('#loading').fadeIn();
         try {
-          await axios.delete('/api/products/delete/' + id);
+          await axios.delete('/api/products/' + id);
           getProductList();
         } catch (e) {
           console.error(e);
@@ -128,11 +128,11 @@ $(document).ready(function () {
 
       try {
         if (mode === 'edit') {
-          await axios.patch('/api/products/update', newUser);
+          await axios.patch('/api/products', newProduct);
         } else {
-          await axios.post('/api/products/create', newUser);
+          await axios.post('/api/products', newProduct);
         }
-        $('#createUser').modal('hide');
+        $('#createProduct').modal('hide');
         clearForm();
         getProductList();
       } catch (e) {

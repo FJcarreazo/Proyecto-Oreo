@@ -20,7 +20,7 @@ productRouter.get('/', async (req, res) => {
     }
 });
 
-productRouter.delete('/delete/:id', async (request, response) => {
+productRouter.delete('/:id', async (request, response) => {
     const deleteProduct = await Product.deleteOne({ _id: request.params.id });
     if (!deleteProduct) {
         return response.status(500).json({ error: 'No se pudo eliminar el producto' });
@@ -28,7 +28,7 @@ productRouter.delete('/delete/:id', async (request, response) => {
     return response.status(200).json('Producto eliminado');
 });
 
-productRouter.patch('/update', async (request, response) => {
+productRouter.patch('/', async (request, response) => {
     const updateParams = {
         name: request.body.name,
         quantity: request.body.quantity,
