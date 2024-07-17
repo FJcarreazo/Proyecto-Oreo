@@ -14,6 +14,15 @@ usersRouter.get('/', async (request, response) => {
   }
 });
 
+usersRouter.post('/create', async (request, response) => {
+});
+
+usersRouter.patch('/update', async (request, response) => {
+});
+
+usersRouter.delete('/delete', async (request, response) => {
+});
+
 usersRouter.post('/', async (request, response) => {
   const { name, email, selector, telefono, password } = request.body
 
