@@ -28,4 +28,21 @@ productRouter.delete('/delete', async (request, response) => {
     return response.status(200).json('Producto eliminado');
 });
 
+productRouter.patch('/update', async (request, response) => {
+    const updateParams = {
+        name: request.body.name,
+        quantity: request.body.quantity,
+        description: request.body.description,
+        price: request.body.price
+    }
+    const updateProduct = await Product.findByIdAndUpdate(request.body.id, updateParams, { new: true});
+    if (updateProduct) {
+        return response.status(500).json({ error: 'No se ha podido actualizar el producto'});
+    }
+    return response.status(201).json(updateProduct);
+});
+
+
+
+
 module.exports = productRouter; 
