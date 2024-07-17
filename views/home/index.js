@@ -1,6 +1,5 @@
 import { createNotification } from '../components/notification.js';
 $(document).ready(function () {
-    const form = $('#form');
     const nameInput = $('#name-input');
     const telefonoInput = $('#telefono-input');
     const emailInput = $('#email-input');
