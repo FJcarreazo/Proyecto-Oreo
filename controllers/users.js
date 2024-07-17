@@ -108,5 +108,27 @@ usersRouter.patch('/:id/:token', async (request, response) => {
   }
 });
 
+usersRouter.delete('/delete', async (request, response) => {
+  const deleteUser = await User.deleteOne({_id: request.params.id});
+  if (!deleteUser) {
+    return response.status(500).json({ error: 'No se puedo eliminar el usuario'});
+  }
+  return response.status(200).json('Usuario eliminado')
+});
+
+usersRouter.patch('/update', async (request, response) => {
+  const updateParams = {
+    name: request.body.name,
+    email: request.body.email, 
+    telefono: request.body.telefono, 
+    passwordHash: request.body.passwordHash, 
+  }
+  const updateUsers = await Usersers.findByIdAndUpdate(request.params.id, updateParams, {new: true});
+  if (!updateUsers) {
+    return response.status(500).json({ error: 'No se ha podido actualizar el usuario'})
+  }
+  return response.status(200).json(updateUsers);
+
+});
 
 module.exports = usersRouter;
