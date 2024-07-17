@@ -9,10 +9,10 @@ formulario.addEventListener('submit', async (event) => {
   const descripcion = document.getElementById('descripcion').value;
   const precio = document.getElementById('precio').value;
 
-  /* let formData = new FormData();
+   let formData = new FormData();
   formData.append('name', nameProduct);
   formData.append('description', descripcion);
-  formData.append('price', precio); */
+  formData.append('price', precio); 
 
   let reqBody = {
     name: nameProduct,
@@ -37,11 +37,11 @@ formulario.addEventListener('submit', async (event) => {
   })
   .then(data => {
 
-    console.log('Producto creado:', data); 
+    console.log('Producto creado:', data);
 
   })
   .catch(error => {
     console.error('Error:', error);
-  });  
+  });
 });
 
