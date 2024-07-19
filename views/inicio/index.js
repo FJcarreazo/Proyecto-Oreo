@@ -42,7 +42,7 @@ cerrarSeccion.addEventListener('click', async e => {
 
 async function fetchProducts() {
     try {
-      const response = await axios.get('https://proyecto-oreo.onrender.com/admin/products/');
+      const response = await axios.get('http://localhost:3003/api/products');
       const products = response.data;
      
       
