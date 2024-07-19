@@ -84,7 +84,7 @@ courseBtn.forEach(btn => {
 // Función para obtener productos desde el backend
 async function fetchProducts() {
   try {
-    const response = await axios.get('http://localhost:3003/api/products');
+    const response = await axios.get('/api/products');
     const products = response.data;
 
 
