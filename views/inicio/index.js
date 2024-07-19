@@ -10,25 +10,20 @@ const cerrarSeccion = document.querySelector('#sesion-btn')
 const productList = document.querySelector("#product-list");
 const courseBtn = document.querySelectorAll("#course-btn");
 
-
 shopIcon.addEventListener('click', e => {
   cart.classList.add('h-96', 'p-4');
-
 });
 
 closeCart.addEventListener('click', e => {
   cart.classList.remove('h-96', 'p-4');
-
 });
 
 sessionBtn.addEventListener('click', e => {
   seccion.classList.add('h-96', 'p-4');
-
 });
 
 vovlerBtn.addEventListener('click', e => {
   seccion.classList.remove('h-96', 'p-4');
-
 });
 
 cerrarSeccion.addEventListener('click', async e => {
@@ -45,9 +40,8 @@ courseBtn.forEach(btn => {
     console.log(e.target);
     const img = e.target.parentElement.parentElement.children[0].innerHTML;
     const name = e.target.parentElement.children[0].innerHTML;
-
-
     const exist = [...table.children].find(Element => Element.children[1].innerHTML == name);
+
     if (exist) {
       exist.children[3].innerHTML = Number(exist.children[3].innerHTML) + 1;
     } else {
@@ -61,22 +55,15 @@ courseBtn.forEach(btn => {
           <td>
           <svg xmlns="http://www.w3.org/2000/svg" class=""delete-btn fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
+            </svg>
           </td>
           `;
-
       row.children[4].addEventListener('click', e => {
         e.currentTarget.parentElement.remove();
       });
 
-
-
       table.append(row);
-
     }
-
-
-
 
   });
 });
@@ -86,8 +73,6 @@ async function fetchProducts() {
   try {
     const response = await axios.get('/api/products');
     const products = response.data;
-
-
 
     // Renderizar la lista de productos
     products.forEach(product => {
@@ -110,11 +95,3 @@ async function fetchProducts() {
 
 // Llamar a la función para obtener productos al cargar la página
 fetchProducts();
-
-
-
-
-
-
-
-
