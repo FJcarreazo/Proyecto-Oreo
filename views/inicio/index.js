@@ -160,6 +160,8 @@ $(document).ready(function () {
     }
   }
 
+  showCart();
+
   $('#table-clear').on('click', function () {
     localStorage.removeItem('carrito');
     showCart();
